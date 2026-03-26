@@ -1,0 +1,25 @@
+name: Update CRC Dashboard
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install requests
+      - name: Generate and publish dashboard
+        run: python generate.py
+        env:
+          JIRA_EMAIL: ${{ vars.JIRA_EMAIL }}
+          JIRA_TOKEN: ${{ vars.JIRA_TOKEN }}
+          GH_PAT: ${{ vars.GH_PAT }}
