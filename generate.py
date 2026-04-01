@@ -32,6 +32,7 @@ ASSIGNEE_MAP = [
     ("Yasmin Jannuzzi","Yasmin Cozaciuc"),("Yasmin Di Franco","Yasmin Cozaciuc"),
     ("William Bartos","William Bartos"),
     ("Phillipe Soares","Phillipe Rangel"),
+    ("João Sant","Joao Sant Anna"),("Joao Sant","Joao Sant Anna"),("Sant'Anna","Joao Sant Anna"),
 ]
 
 GROUPS = [
@@ -39,7 +40,7 @@ GROUPS = [
         {"display":"André Porto",    "key":"Andre Porto",    "initials":"AN"},
         {"display":"Ricardo Suzuki", "key":"Ricardo Suzuki", "initials":"RC"},
         {"display":"Bárbara Hülse",  "key":"Barbara Hulse",  "initials":"BH"},
-        {"display":"João Sant'Anna", "key":"Joao Sant Anna", "initials":"JO","nao_atuou":True},
+        {"display":"João Sant'Anna", "key":"Joao Sant Anna", "initials":"JO"},
     ]},
     {"num":2,"cls":"g2","icon":"⚡","members":[
         {"display":"Cristtiane Sjobom","key":"Cristtiane Sjobom","initials":"CS"},
