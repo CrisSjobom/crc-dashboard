@@ -1,6 +1,6 @@
 import requests, base64, os, sys
 from requests.auth import HTTPBasicAuth
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from collections import Counter
 
 JIRA_EMAIL = os.environ['JIRA_EMAIL']
@@ -39,7 +39,7 @@ GROUPS = [
         {'display':'André Porto',     'key':'André Porto',     'ini':'AN'},
         {'display':'Ricardo Suzuki',  'key':'Ricardo Suzuki',  'ini':'RC'},
         {'display':'Bárbara Hülse',   'key':'Bárbara Hülse',   'ini':'BH'},
-        {'display':"João Sant'Anna",  'key':"João Sant'Anna",  'ini':'JO','dest':True},
+        {'display':"João Sant'Anna",  'key':"João Sant'Anna",  'ini':'JO'},
     ]},
     {'num':2,'cls':'g2','icon':'⚡','members':[
         {'display':'Cristtiane Sjobom','key':'Cristtiane Sjobom','ini':'CS'},
@@ -259,7 +259,8 @@ header p { color: #8b949e; margin-top: 6px; font-size: 0.9rem; }
 def generate_html(issues, mi):
     stats = Counter(i['fields']['status']['name'] for i in issues if i['fields'].get('status'))
     total = len(issues)
-    now   = datetime.now().strftime('%d/%m/%Y %H:%M')
+    tz_sp = timezone(timedelta(hours=-3))
+    now   = datetime.now(tz_sp).strftime('%d/%m/%Y %H:%M')
     cards = ''.join(group_html(g, mi) for g in GROUPS)
 
     em   = stats.get('Em andamento', 0)
@@ -310,5 +311,6 @@ if __name__ == '__main__':
     mi = build_map(issues)
     print(str(len(issues)) + ' issues / ' + str(len(mi)) + ' membros mapeados')
     html = generate_html(issues, mi)
-    push_file('index.html', html, 'chore: dashboard ' + datetime.now().strftime('%d/%m/%Y %H:%M'))
+    tz_sp = timezone(timedelta(hours=-3))
+    push_file('index.html', html, 'chore: dashboard ' + datetime.now(tz_sp).strftime('%d/%m/%Y %H:%M'))
     print('Concluido!')
