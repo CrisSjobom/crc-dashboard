@@ -51,7 +51,7 @@ GROUPS = [
         {'display':'Gerbert Santos',  'key':'Gerbert Santos',  'ini':'GS'},
         {'display':'Pedro Stival',    'key':'Pedro Stival',    'ini':'PS'},
         {'display':'Bruno Martins',   'key':'Bruno Martins',   'ini':'BM'},
-        {'display':'Isabela Araújo',  'key':'Isabela Araújo',  'ini':'IA','nao_atuou':True},
+        {'display':'Isabela Araújo',  'key':'Isabela Araújo',  'ini':'IA'},
     ]},
     {'num':4,'cls':'g4','icon':'💎','members':[
         {'display':'Ricardo Goes',      'key':'Ricardo Goes',      'ini':'RG'},
@@ -67,7 +67,7 @@ GROUPS = [
     ]},
     {'num':6,'cls':'g6','icon':'💠','members':[
         {'display':'Yasmin Cozaciuc', 'key':'Yasmin Cozaciuc', 'ini':'YC'},
-        {'display':'William Bartos',  'key':'William Bartos',  'ini':'WB','nao_atuou':True},
+        {'display':'William Bartos',  'key':'William Bartos',  'ini':'WB'},
         {'display':'Phillipe Rangel', 'key':'Phillipe Rangel', 'ini':'PR'},
     ]},
 ]
