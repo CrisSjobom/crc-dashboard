@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics - CS Interno Mottu</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,sans-serif; background:#0d1117; color:#e6edf3; min-height:100vh; }
+header { background:linear-gradient(135deg,#1a1f2e 0%,#0d1117 100%); border-bottom:2px solid #21262d; padding:20px 32px; }
+.header-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+header h1 { font-size:1.5rem; font-weight:700; color:#f0f6fc; }
+header h1 span { color:#58a6ff; }
+.header-sub { color:#8b949e; font-size:0.85rem; margin-top:4px; }
+.back-btn { background:#21262d; border:1px solid #30363d; color:#8b949e; padding:6px 16px; border-radius:20px; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all .2s; }
+.back-btn:hover { background:#30363d; color:#e6edf3; }
+.kpi-row { display:flex; gap:16px; padding:20px 32px; flex-wrap:wrap; }
+.kpi { background:#161b22; border:1px solid #30363d; border-radius:10px; padding:14px 22px; flex:1; min-width:160px; }
+.kpi-label { font-size:0.7rem; color:#8b949e; text-transform:uppercase; letter-spacing:.5px; }
+.kpi-value { font-size:1.8rem; font-weight:700; color:#f0f6fc; margin-top:4px; }
+.kpi-sub { font-size:0.72rem; color:#484f58; margin-top:2px; }
+.kpi-accent { border-color:#1f6feb; }
+.kpi-accent .kpi-value { color:#58a6ff; }
+.tab-nav { display:flex; gap:4px; padding:0 32px; border-bottom:1px solid #21262d; overflow-x:auto; }
+.tab-btn { background:none; border:none; color:#8b949e; padding:10px 20px; font-size:0.85rem; cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap; }
+.tab-btn:hover { color:#e6edf3; }
+.tab-btn.active { color:#58a6ff; border-bottom-color:#58a6ff; font-weight:600; }
+.tab-content { display:none; padding:24px 32px; }
+.tab-content.active { display:block; }
+.chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.chart-card { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:20px; }
+.chart-card.full { grid-column:1/-1; }
+.chart-title { font-size:0.9rem; font-weight:600; color:#f0f6fc; margin-bottom:4px; }
+.chart-sub { font-size:0.72rem; color:#8b949e; margin-bottom:16px; }
+footer { text-align:center; padding:16px; color:#484f58; font-size:0.72rem; border-top:1px solid #21262d; margin-top:8px; }
+@media(max-width:900px){ .chart-grid{grid-template-columns:1fr;} .chart-card.full{grid-column:1;} }
+@media(max-width:600px){ header,.kpi-row,.tab-nav,.tab-content{padding-left:16px;padding-right:16px;} }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-top">
+    <div>
+      <h1>&#128202; Analytics &middot; <span>CS Interno</span></h1>
+      <div class="header-sub">Evolucao de tickets &middot; Jan - Mar 2026 &middot; Fonte: BigQuery Mottu</div>
+    </div>
+    <a href="." class="back-btn">&#8592; Dashboard CRC</a>
+  </div>
+</header>
+
+<div class="kpi-row">
+  <div class="kpi kpi-accent">
+    <div class="kpi-label">Total de Tickets</div>
+    <div class="kpi-value" id="kpi-total"></div>
+    <div class="kpi-sub">Jan - Mar 2026</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Semanas analisadas</div>
+    <div class="kpi-value" id="kpi-semanas"></div>
+    <div class="kpi-sub">Jan &ndash; Mar 2026</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Filiais ativas</div>
+    <div class="kpi-value" id="kpi-filiais"></div>
+    <div class="kpi-sub">com pelo menos 1 ticket</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Assuntos distintos</div>
+    <div class="kpi-value" id="kpi-assuntos"></div>
+    <div class="kpi-sub">classificados</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Principal assunto</div>
+    <div class="kpi-value" id="kpi-top" style="font-size:0.95rem;margin-top:6px;line-height:1.3"></div>
+    <div class="kpi-sub" id="kpi-top-n"></div>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('evolucao',this)">&#128200; Evolucao Semanal</button>
+  <button class="tab-btn" onclick="showTab('assuntos',this)">&#127991; Por Assunto</button>
+  <button class="tab-btn" onclick="showTab('filiais',this)">&#127963; Por Filial</button>
+  <button class="tab-btn" onclick="showTab('tendencias',this)">&#128293; Tendencias</button>
+</div>
+
+<div id="tab-evolucao" class="tab-content active">
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <div class="chart-title">Evolucao Semanal de Tickets</div>
+      <div class="chart-sub">Total de tickets abertos por semana</div>
+      <canvas id="chartEvolucao" height="80"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Volume por Mes</div>
+      <div class="chart-sub">Comparativo mensal acumulado</div>
+      <canvas id="chartMensal" height="180"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Distribuicao por Semana</div>
+      <div class="chart-sub">Participacao relativa de cada semana</div>
+      <canvas id="chartDoughnut" height="180"></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="tab-assuntos" class="tab-content">
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <div class="chart-title">Top 20 Assuntos por Volume</div>
+      <div class="chart-sub">Total acumulado Jan&ndash;Mar 2026</div>
+      <canvas id="chartAssuntos" height="110"></canvas>
+    </div>
+    <div class="chart-card full">
+      <div class="chart-title">Top 8 Assuntos &mdash; Evolucao Semanal</div>
+      <div class="chart-sub">Linha do tempo por assunto</div>
+      <canvas id="chartAssuntosEvo" height="80"></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="tab-filiais" class="tab-content">
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <div class="chart-title">Top 20 Filiais por Volume de Tickets</div>
+      <div class="chart-sub">Total acumulado Jan&ndash;Mar 2026</div>
+      <canvas id="chartFiliais" height="110"></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="tab-tendencias" class="tab-content">
+  <div class="chart-grid">
+    <div class="chart-card full">
+      <div class="chart-title">Top 15 Filiais &mdash; Evolucao Semanal</div>
+      <div class="chart-sub">Volume de tickets por semana por filial</div>
+      <canvas id="chartFiliaisEvo" height="80"></canvas>
+    </div>
+  </div>
+</div>
+
+<footer>Dados de 07/04/2026 &middot; Fonte: dm-mottu-aluguel.exp_atendimentos.tickets_intercom_csinterno</footer>
+
+<script>
+const DATA = {"semanas": ["2025-12-29", "2026-01-05", "2026-01-12", "2026-01-19", "2026-01-26", "2026-02-02", "2026-02-09", "2026-02-16", "2026-02-23", "2026-03-02", "2026-03-09", "2026-03-16", "2026-03-23"], "semana_labels": ["12-29", "01-05", "01-12", "01-19", "01-26", "02-02", "02-09", "02-16", "02-23", "03-02", "03-09", "03-16", "03-23"], "weekly_total": [616, 2441, 1969, 2423, 2178, 2215, 1899, 1557, 1758, 2034, 2107, 1992, 1491], "top_assuntos": ["ERRO DURANTE A MANUTENCAO", "SOLICITAR SLOTS PARA RETIRADA", "SOLICITAR TROCA DE MOTO MOTIVO DESCONHECIDO", "ERRO SOBRE RETIRADA PEDIDO MOTTU STORE", "SOLICITAR TROCA AUTOMATIZADO", "NAO E POSSIVEL ACESSAR O APP POR ERRO NA TELA INICIAL", "ERRO NO RECONHECIMENTO FACIAL", "SOLICITAR TROCA DE MOTO POR FALTA DE PECA", "DOCUMENTACAO ATRASADA FROTA", "VINCULO DE MOTO TITULAR OU MINHA MOTTU", "PENDENCIAS 190 E BO", "PROBLEMA COM TERMO DE RESPONSABILIDADE", "DUVIDA SOBRE PAGAMENTOS", "ERRO NO TOTEM MOTIVO DESCONHECIDO", "NAO E POSSIVEL ACESSAR A CS", "ERRO AO ABRIR RETIRADA", "REANALISAR NUMERACAO DE MOTOR OU CHASSI DIGITADA INCORRETAMENTE", "DUVIDA SOBRE MANUTENCAO", "DEBITO PENDENTE NAO APARECE NO APP", "INVENTARIO DE MOTOS"], "assunto_totals": [1740, 939, 784, 725, 505, 423, 413, 393, 376, 294, 259, 239, 224, 196, 187, 183, 180, 167, 166, 151], "top_filiais": ["Mottu Vila Leopoldina", "Mottu Recife", "Mottu Curitiba", "Mottu Taboão", "Mottu Natal", "Mottu Teresina", "Mottu Salvador", "Mottu João Pessoa", "Mottu Praia Grande", "Mottu São Miguel", "Mottu Guarulhos", "Mottu Ipiranga", "Mottu São Bernardo", "Mottu Santos", "Mottu Porto Alegre", "Mottu Aracaju", "Mottu Fátima", "Mottu Manaus", "Mottu Belém", "Mottu Ananindeua"], "filial_totals": [620, 547, 534, 522, 514, 494, 493, 474, 438, 383, 370, 370, 368, 366, 361, 356, 356, 354, 346, 339], "top8_assuntos": ["ERRO DURANTE A MANUTENCAO", "SOLICITAR SLOTS PARA RETIRADA", "SOLICITAR TROCA DE MOTO MOTIVO DESCONHECIDO", "ERRO SOBRE RETIRADA PEDIDO MOTTU STORE", "SOLICITAR TROCA AUTOMATIZADO", "NAO E POSSIVEL ACESSAR O APP POR ERRO NA TELA INICIAL", "ERRO NO RECONHECIMENTO FACIAL", "SOLICITAR TROCA DE MOTO POR FALTA DE PECA"], "weekly_by_assunto": {"ERRO DURANTE A MANUTENCAO": [1, 48, 119, 102, 114, 117, 164, 133, 138, 154, 190, 277, 183], "SOLICITAR SLOTS PARA RETIRADA": [35, 108, 85, 82, 93, 101, 74, 60, 72, 69, 71, 49, 40], "SOLICITAR TROCA DE MOTO MOTIVO DESCONHECIDO": [22, 65, 56, 62, 65, 83, 68, 62, 78, 62, 62, 68, 31], "ERRO SOBRE RETIRADA PEDIDO MOTTU STORE": [57, 47, 40, 77, 49, 46, 56, 27, 49, 72, 109, 52, 44], "SOLICITAR TROCA AUTOMATIZADO": [0, 61, 79, 106, 76, 46, 18, 23, 8, 52, 9, 13, 14], "NAO E POSSIVEL ACESSAR O APP POR ERRO NA TELA INICIAL": [6, 38, 19, 41, 45, 53, 53, 36, 19, 33, 26, 37, 17], "ERRO NO RECONHECIMENTO FACIAL": [4, 87, 90, 51, 23, 14, 16, 16, 15, 23, 18, 12, 44], "SOLICITAR TROCA DE MOTO POR FALTA DE PECA": [22, 50, 29, 27, 39, 28, 40, 35, 37, 22, 16, 28, 20]}, "top15_filiais": ["Mottu Vila Leopoldina", "Mottu Recife", "Mottu Curitiba", "Mottu Taboão", "Mottu Natal", "Mottu Teresina", "Mottu Salvador", "Mottu João Pessoa", "Mottu Praia Grande", "Mottu São Miguel", "Mottu Guarulhos", "Mottu Ipiranga", "Mottu São Bernardo", "Mottu Santos", "Mottu Porto Alegre"], "weekly_by_filial": {"Mottu Vila Leopoldina": [25, 70, 41, 57, 41, 69, 80, 49, 37, 64, 29, 58, 0], "Mottu Recife": [12, 44, 36, 25, 63, 70, 57, 58, 46, 46, 29, 23, 38], "Mottu Curitiba": [8, 49, 41, 39, 70, 50, 44, 26, 53, 50, 27, 29, 48], "Mottu Taboão": [24, 49, 48, 43, 57, 35, 59, 32, 40, 48, 36, 51, 0], "Mottu Natal": [8, 55, 42, 48, 51, 45, 38, 43, 34, 39, 34, 47, 30], "Mottu Teresina": [20, 42, 40, 74, 44, 50, 41, 48, 33, 52, 24, 26, 0], "Mottu Salvador": [17, 54, 39, 51, 47, 34, 39, 35, 44, 24, 41, 33, 35], "Mottu João Pessoa": [14, 71, 36, 66, 56, 30, 26, 25, 30, 32, 33, 25, 30], "Mottu Praia Grande": [14, 63, 66, 67, 29, 30, 23, 35, 22, 30, 28, 19, 12], "Mottu São Miguel": [3, 74, 32, 36, 37, 37, 35, 21, 29, 26, 29, 24, 0], "Mottu Guarulhos": [3, 29, 25, 29, 47, 32, 15, 28, 26, 22, 32, 43, 39], "Mottu Ipiranga": [1, 14, 17, 39, 32, 53, 25, 25, 37, 33, 25, 34, 35], "Mottu São Bernardo": [9, 35, 24, 24, 21, 26, 19, 33, 25, 49, 33, 32, 38], "Mottu Santos": [16, 57, 32, 29, 52, 39, 18, 9, 18, 21, 16, 21, 38], "Mottu Porto Alegre": [3, 13, 10, 24, 49, 35, 20, 33, 25, 42, 52, 41, 14]}, "total_tickets": 24680, "generated": "07/04/2026", "periodo": "Jan - Mar 2026"};
+const C8 = ["#58a6ff", "#56d364", "#ffa657", "#f85149", "#d2a8ff", "#79c0ff", "#e3b341", "#ff7b72"];
+const C20 = ["#58a6ff", "#56d364", "#ffa657", "#f85149", "#d2a8ff", "#79c0ff", "#e3b341", "#ff7b72", "#3fb950", "#1f6feb", "#8957e5", "#bd561d", "#2ea043", "#da3633", "#9e6a03", "#388bfd", "#bc8cff", "#ffab70", "#ff8182", "#7ee787"];
+
+Chart.defaults.color = '#8b949e';
+Chart.defaults.borderColor = '#21262d';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+document.getElementById('kpi-total').textContent = DATA.total_tickets.toLocaleString('pt-BR');
+document.getElementById('kpi-semanas').textContent = DATA.semanas.length;
+document.getElementById('kpi-filiais').textContent = DATA.top_filiais.length + '+';
+document.getElementById('kpi-assuntos').textContent = DATA.top_assuntos.length + '+';
+document.getElementById('kpi-top').textContent = DATA.top_assuntos[0].split(' ').slice(0,5).join(' ');
+document.getElementById('kpi-top-n').textContent = DATA.assunto_totals[0].toLocaleString('pt-BR') + ' tickets';
+
+new Chart(document.getElementById('chartEvolucao'), {
+  type: 'line',
+  data: {
+    labels: DATA.semana_labels,
+    datasets: [{
+      label: 'Tickets',
+      data: DATA.weekly_total,
+      borderColor: '#58a6ff',
+      backgroundColor: 'rgba(88,166,255,0.12)',
+      borderWidth: 2.5,
+      pointBackgroundColor: '#58a6ff',
+      pointRadius: 5, pointHoverRadius: 7,
+      fill: true, tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString('pt-BR') + ' tickets' } }
+    },
+    scales: {
+      x: { grid: { color: '#21262d' } },
+      y: { grid: { color: '#21262d' }, ticks: { callback: v => v.toLocaleString('pt-BR') } }
+    }
+  }
+});
+
+const byMonth = {};
+DATA.semanas.forEach((s,i) => { const m=s.slice(0,7); byMonth[m]=(byMonth[m]||0)+DATA.weekly_total[i]; });
+const mLabels = {'2025-12':'Dez/25','2026-01':'Jan/26','2026-02':'Fev/26','2026-03':'Mar/26'};
+const months = Object.keys(byMonth);
+new Chart(document.getElementById('chartMensal'), {
+  type: 'bar',
+  data: {
+    labels: months.map(m => mLabels[m]||m),
+    datasets: [{ label:'Tickets', data: months.map(m=>byMonth[m]),
+      backgroundColor:['#30363d','#1f4a8a','#1f4a8a','#1f4a8a'],
+      borderColor:['#484f58','#388bfd','#388bfd','#388bfd'],
+      borderWidth:1, borderRadius:6 }]
+  },
+  options: { responsive:true, plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:'#21262d'}},y:{grid:{color:'#21262d'}}} }
+});
+
+new Chart(document.getElementById('chartDoughnut'), {
+  type: 'doughnut',
+  data: {
+    labels: DATA.semana_labels,
+    datasets: [{ data: DATA.weekly_total, backgroundColor: C20.slice(0,DATA.semanas.length),
+      borderColor:'#161b22', borderWidth:2, hoverOffset:8 }]
+  },
+  options: { responsive:true,
+    plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}} }
+});
+
+new Chart(document.getElementById('chartAssuntos'), {
+  type: 'bar',
+  data: {
+    labels: DATA.top_assuntos.map(a => a.length>45 ? a.slice(0,45)+'...' : a),
+    datasets: [{ label:'Tickets', data: DATA.assunto_totals,
+      backgroundColor: C20, borderRadius:4, borderWidth:0 }]
+  },
+  options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:'#21262d'}},y:{grid:{display:false},ticks:{font:{size:11}}}} }
+});
+
+new Chart(document.getElementById('chartAssuntosEvo'), {
+  type: 'line',
+  data: {
+    labels: DATA.semana_labels,
+    datasets: DATA.top8_assuntos.map((a,i) => ({
+      label: a.length>35?a.slice(0,35)+'...':a,
+      data: DATA.weekly_by_assunto[a],
+      borderColor: C8[i], backgroundColor:'transparent',
+      borderWidth:2, pointRadius:3, tension:0.3
+    }))
+  },
+  options: { responsive:true,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},
+    scales:{x:{grid:{color:'#21262d'}},y:{grid:{color:'#21262d'}}} }
+});
+
+new Chart(document.getElementById('chartFiliais'), {
+  type: 'bar',
+  data: {
+    labels: DATA.top_filiais.map(f => f.replace('Mottu ','')),
+    datasets: [{ label:'Tickets', data: DATA.filial_totals,
+      backgroundColor: C20, borderRadius:4, borderWidth:0 }]
+  },
+  options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:'#21262d'}},y:{grid:{display:false},ticks:{font:{size:11}}}} }
+});
+
+new Chart(document.getElementById('chartFiliaisEvo'), {
+  type: 'line',
+  data: {
+    labels: DATA.semana_labels,
+    datasets: DATA.top15_filiais.map((f,i) => ({
+      label: f.replace('Mottu ',''),
+      data: DATA.weekly_by_filial[f],
+      borderColor: C20[i], backgroundColor:'transparent',
+      borderWidth:1.5, pointRadius:2, tension:0.3
+    }))
+  },
+  options: { responsive:true,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},
+    scales:{x:{grid:{color:'#21262d'}},y:{grid:{color:'#21262d'}}} }
+});
+</script>
+</body>
+</html>
