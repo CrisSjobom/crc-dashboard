@@ -3,192 +3,506 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics - CS Interno Mottu</title>
+<title>Relatório CS Interno — 90 dias (base corrigida)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Segoe UI',system-ui,sans-serif; background:#0d1117; color:#e6edf3; min-height:100vh; }
-header { background:linear-gradient(135deg,#1a1f2e 0%,#0d1117 100%); border-bottom:2px solid #21262d; padding:20px 32px; }
-.header-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-header h1 { font-size:1.5rem; font-weight:700; color:#f0f6fc; }
-header h1 span { color:#58a6ff; }
-.header-sub { color:#8b949e; font-size:0.85rem; margin-top:4px; }
-.back-btn { background:#21262d; border:1px solid #30363d; color:#8b949e; padding:6px 16px; border-radius:20px; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
-.back-btn:hover { background:#30363d; color:#e6edf3; }
-.kpi-row { display:flex; gap:16px; padding:20px 32px; flex-wrap:wrap; }
-.kpi { background:#161b22; border:1px solid #30363d; border-radius:10px; padding:14px 22px; flex:1; min-width:150px; }
-.kpi-label { font-size:0.7rem; color:#8b949e; text-transform:uppercase; letter-spacing:.5px; }
-.kpi-value { font-size:1.8rem; font-weight:700; color:#f0f6fc; margin-top:4px; }
-.kpi-sub { font-size:0.72rem; color:#484f58; margin-top:2px; }
-.kpi-accent .kpi-value { color:#58a6ff; }
-.kpi-accent { border-color:#1f6feb; }
-.page { padding:24px 32px; }
-.chart-card { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:24px 24px 16px; margin-bottom:20px; }
-.chart-title { font-size:1rem; font-weight:700; color:#f0f6fc; margin-bottom:4px; }
-.chart-subtitle { font-size:0.78rem; color:#8b949e; margin-bottom:20px; }
-.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-footer { text-align:center; padding:16px; color:#484f58; font-size:0.72rem; border-top:1px solid #21262d; margin-top:8px; }
-@media(max-width:900px){.two-col{grid-template-columns:1fr;} header,.kpi-row,.page{padding-left:16px;padding-right:16px;}}
+:root{
+  --font:'Inter',ui-sans-serif,system-ui,sans-serif;
+  --bg:#F4F4F5;--surface:#FFFFFF;--surface-muted:#E4E4E7;
+  --text:#27272A;--text-secondary:#52525B;--text-muted:#A1A1AA;--border:#E4E4E7;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow-md:0 1px 2px rgba(0,0,0,.08),0 8px 20px rgba(0,0,0,.05);
+  --radius:8px;--radius-lg:12px;
+  --blue:#1E40AF;--blue-l:#DBEAFE;--blue-p:rgba(30,64,175,.06);
+  --orange:#EA580C;--orange-l:#FFEDD5;
+  --red:#DC2626;--red-l:#FEE2E2;
+  --green:#15803D;--green-l:#DCFCE7;
+  --purple:#7C3AED;--purple-l:#EDE9FE;
+  --yellow:#D97706;--yellow-l:#FEF3C7;
+  --pink:#BE185D;--pink-l:#FCE7F3;
+  --teal:#0F766E;--teal-l:#CCFBF1;
+}
+@media(prefers-color-scheme:dark){:root{--bg:#18181B;--surface:#27272A;--surface-muted:#3F3F46;--text:#F4F4F5;--text-secondary:#A1A1AA;--text-muted:#71717A;--border:#3F3F46;--blue-l:#1E3A8A;--blue-p:rgba(30,64,175,.14);}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);padding:2rem 1rem;}
+.page{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:1.5rem;}
+
+/* header */
+.header{background:var(--blue);border-radius:var(--radius-lg);padding:2rem 2.5rem;color:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;box-shadow:var(--shadow-md);}
+.header h1{font-size:1.5rem;font-weight:800;line-height:1.25;letter-spacing:-.02em;}
+.header .sub{margin-top:.4rem;font-size:.875rem;opacity:.8;}
+.header-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;flex-shrink:0;}
+.meta-pill{display:inline-flex;align-items:center;padding:.3rem .8rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:9999px;font-size:.78rem;font-weight:600;color:#fff;}
+
+/* notice */
+.notice{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:var(--radius);padding:.8rem 1.2rem;font-size:.82rem;color:#1E40AF;display:flex;align-items:center;gap:.6rem;}
+.scope-banner{background:var(--yellow-l);border:1px solid #F59E0B;border-radius:var(--radius);padding:.8rem 1.2rem;font-size:.82rem;color:#78350F;display:flex;align-items:center;gap:.6rem;}
+.scope-banner strong,.notice strong{font-weight:700;}
+
+/* kpis */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;}
+.kpi{background:var(--surface);border-radius:var(--radius-lg);padding:1.2rem 1.5rem;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-top:3px solid var(--blue);}
+.kpi.or{border-top-color:var(--orange);}.kpi.re{border-top-color:var(--red);}.kpi.gr{border-top-color:var(--green);}.kpi.pu{border-top-color:var(--purple);}
+.kpi-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem;}
+.kpi-val{font-size:2rem;font-weight:800;line-height:1;color:var(--blue);}
+.kpi.or .kpi-val{color:var(--orange);}.kpi.re .kpi-val{color:var(--red);}.kpi.gr .kpi-val{color:var(--green);}.kpi.pu .kpi-val{color:var(--purple);}
+.kpi-sub{font-size:.72rem;color:var(--text-secondary);margin-top:.25rem;}
+
+/* layout */
+.grid-3-1{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;}
+@media(max-width:800px){.grid-3-1{grid-template-columns:1fr;}}
+.card{background:var(--surface);border-radius:var(--radius-lg);padding:1.75rem 2rem;box-shadow:var(--shadow-md);border:1px solid var(--border);}
+.card-hd{font-size:.95rem;font-weight:700;margin-bottom:.2rem;}
+.card-sub{font-size:.78rem;color:var(--text-secondary);margin-bottom:1.25rem;}
+.chart-wrap{position:relative;}
+.h380{height:380px;}.h320{height:320px;}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.85rem;}
+.leg{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--text-secondary);}
+.leg-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+.section-title{font-size:1.05rem;font-weight:700;display:flex;align-items:center;gap:.5rem;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* filial */
+.filial-list{display:flex;flex-direction:column;gap:.42rem;}
+.filial-item{display:flex;align-items:center;gap:.6rem;}
+.filial-name{font-size:.77rem;font-weight:500;min-width:130px;flex-shrink:0;}
+.filial-bar-bg{flex:1;height:7px;background:var(--surface-muted);border-radius:9999px;overflow:hidden;}
+.filial-bar-fg{height:100%;border-radius:9999px;background:var(--blue);}
+.filial-count{font-size:.76rem;font-weight:700;color:var(--blue);min-width:30px;text-align:right;}
+.filial-pct{font-size:.7rem;color:var(--text-muted);min-width:36px;text-align:right;}
+
+/* table */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+thead th{padding:.6rem 1rem;text-align:left;font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:var(--bg);border-bottom:2px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s;}
+tbody tr:hover{background:var(--bg);}
+tbody tr.hi{background:var(--blue-p);}
+td{padding:.65rem 1rem;vertical-align:middle;}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.7rem;font-weight:700;}
+.rank-hi{background:var(--blue);color:#fff;}.rank-lo{background:var(--surface-muted);color:var(--text-secondary);}
+.bar-row{display:flex;align-items:center;gap:.45rem;}
+.bar-bg{flex:1;height:5px;background:var(--surface-muted);border-radius:9999px;overflow:hidden;min-width:60px;}
+.bar-fg{height:100%;border-radius:9999px;background:var(--blue);}
+.bar-fg.lo{background:var(--border);}
+.pct-lbl{font-size:.75rem;font-weight:600;color:var(--text-secondary);min-width:36px;text-align:right;}
+.acum-hi{font-size:.78rem;font-weight:700;color:var(--blue);}
+.acum-lo{font-size:.78rem;font-weight:600;color:var(--text-muted);}
+.pill{display:inline-flex;align-items:center;padding:.15rem .55rem;border-radius:9999px;font-size:.68rem;font-weight:600;}
+.pill-yes{background:var(--green-l);color:var(--green);}.pill-no{background:var(--surface-muted);color:var(--text-muted);}
+.tag{display:inline-flex;align-items:center;padding:.12rem .45rem;border-radius:9999px;font-size:.66rem;font-weight:600;}
+.t-proc{background:var(--blue-l);color:var(--blue);}.t-sis{background:var(--pink-l);color:var(--pink);}
+.t-ac{background:var(--purple-l);color:var(--purple);}.t-fr{background:var(--yellow-l);color:var(--yellow);}
+.t-fin{background:var(--green-l);color:var(--green);}.t-out{background:var(--surface-muted);color:var(--text-muted);}
+
+/* examples */
+.examples-note{font-size:.8rem;color:var(--text-secondary);padding:.3rem 0 .2rem;}
+.examples-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;}
+.ex-card{background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);border:1px solid var(--border);overflow:hidden;}
+.ex-head{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;}
+.ex-rank{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.ex-title{font-size:.82rem;font-weight:700;line-height:1.3;flex:1;}
+.ex-count{font-size:.72rem;font-weight:700;color:var(--blue);flex-shrink:0;}
+.ex-tickets{display:flex;flex-direction:column;}
+.ex-ticket{padding:.8rem 1.25rem;border-bottom:1px solid var(--border);}
+.ex-ticket:last-child{border-bottom:none;}
+.ex-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;flex-wrap:wrap;}
+.ex-filial{font-size:.7rem;font-weight:600;color:var(--blue);background:var(--blue-l);padding:.1rem .45rem;border-radius:9999px;}
+.ex-date{font-size:.7rem;color:var(--text-muted);}
+.ex-link{margin-left:auto;font-size:.7rem;font-weight:600;color:var(--blue);text-decoration:none;padding:.1rem .4rem;border:1px solid var(--blue-l);border-radius:4px;white-space:nowrap;}
+.ex-link:hover{background:var(--blue-l);}
+.ex-desc{font-size:.79rem;line-height:1.5;color:var(--text-secondary);}
+
+/* action */
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;}
+.action-card{background:var(--surface);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;box-shadow:var(--shadow-sm);border:1px solid var(--border);}
+.action-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;}
+.action-icon{width:32px;height:32px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.action-team{font-size:.85rem;font-weight:700;}
+.action-items{display:flex;flex-direction:column;gap:.45rem;}
+.action-item{display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;line-height:1.4;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:.45rem;}
+.blue-card .action-icon{background:var(--blue-l);}.blue-card .dot{background:var(--blue);}
+.orange-card .action-icon{background:var(--orange-l);}.orange-card .dot{background:var(--orange);}
+.purple-card .action-icon{background:var(--purple-l);}.purple-card .dot{background:var(--purple);}
+.teal-card .action-icon{background:var(--teal-l);}.teal-card .dot{background:var(--teal);}
+
+/* insights */
+.insight-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
+.insight{background:var(--surface);border-radius:var(--radius-lg);padding:1.1rem 1.4rem;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-left:3px solid var(--blue);}
+.insight.or{border-left-color:var(--orange);}.insight.re{border-left-color:var(--red);}.insight.gr{border-left-color:var(--green);}.insight.pu{border-left-color:var(--purple);}
+.insight-lbl{font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.4rem;}
+.insight-body{font-size:.83rem;line-height:1.55;}
+.insight-body strong{color:var(--blue);}
+.insight.or .insight-body strong{color:var(--orange);}.insight.re .insight-body strong{color:var(--red);}.insight.gr .insight-body strong{color:var(--green);}.insight.pu .insight-body strong{color:var(--purple);}
+
+.footer{text-align:center;font-size:.72rem;color:var(--text-muted);padding:.5rem 0 1rem;}
 </style>
 </head>
 <body>
-<header>
-  <div class="header-top">
-    <div>
-      <h1>&#128202; Analytics &middot; <span>CS Interno</span></h1>
-      <div class="header-sub">Evolucao de tickets &middot; Jan&ndash;Mar 2026 &middot; Fonte: BigQuery Mottu</div>
-    </div>
-    <a href="." class="back-btn">&#8592; Dashboard CRC</a>
-  </div>
-</header>
-
-<div class="kpi-row">
-  <div class="kpi kpi-accent">
-    <div class="kpi-label">Total de Tickets</div>
-    <div class="kpi-value" id="kpi-total"></div>
-    <div class="kpi-sub">Jan &ndash; Mar 2026</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Semanas</div>
-    <div class="kpi-value">11</div>
-    <div class="kpi-sub">12/01 a 23/03/2026</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Categorias</div>
-    <div class="kpi-value">6</div>
-    <div class="kpi-sub">mapeadas e agrupadas</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Pico semanal</div>
-    <div class="kpi-value" id="kpi-peak"></div>
-    <div class="kpi-sub" id="kpi-peak-cat"></div>
-  </div>
+<div style="background:#18181B;border-bottom:1px solid #3F3F46;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;">
+  <a href="." style="color:#A1A1AA;font-size:0.82rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:#27272A;border:1px solid #3F3F46;border-radius:20px;">&#8592; Dashboard CRC</a>
+  <span style="color:#71717A;font-size:0.75rem;">CS Interno &middot; Relatório 90 dias &middot; Base corrigida</span>
 </div>
-
 <div class="page">
-  <div class="chart-card">
-    <div class="chart-title" id="main-title"></div>
-    <div class="chart-subtitle" id="main-subtitle"></div>
-    <canvas id="chartMain" height="70"></canvas>
-  </div>
-  <div class="two-col">
-    <div class="chart-card">
-      <div class="chart-title">Total por Categoria</div>
-      <div class="chart-subtitle">Acumulado Jan&ndash;Mar 2026</div>
-      <canvas id="chartBar" height="200"></canvas>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Participacao por Categoria</div>
-      <div class="chart-subtitle">Distribuicao percentual do periodo</div>
-      <canvas id="chartPie" height="200"></canvas>
-    </div>
-  </div>
-</div>
 
-<footer>Dados de 07/04/2026 &middot; Fonte: dm-mottu-aluguel.exp_atendimentos.tickets_intercom_csinterno</footer>
+  <div class="header">
+    <div>
+      <h1>Relatório Semanal CS Interno<br>Problemas de Atendimento nas Filiais</h1>
+      <div class="sub">Chamados abertos pelas filiais por processo desconhecido ou falha de sistema · Brasil e LATAM</div>
+    </div>
+    <div class="header-meta">
+      <span class="meta-pill">📅 06 de abril de 2026</span>
+      <span class="meta-pill">📊 90 dias · Base corrigida</span>
+      <span class="meta-pill">🏢 ~7.900 tickets em escopo</span>
+    </div>
+  </div>
+
+  <div class="notice">
+    ✅ <span><strong>Base corrigida:</strong> removido filtro <code>safe_cast(usuario_id as int64)</code> e o LEFT JOIN com macroindicadores — que excluía 91.9% dos tickets válidos. Agora com a base real de <strong>~7.900 tickets</strong> (era 468 antes).</span>
+  </div>
+
+  <div class="scope-banner">
+    ⚠️ <span><strong>Fora do escopo:</strong> Erro durante a manutenção, Troca por falta de peça, Dúvida sobre manutenção, Erro sistema manutenção.</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Tickets (90d)</div><div class="kpi-val">~7.9k</div><div class="kpi-sub">base corrigida</div></div>
+    <div class="kpi or"><div class="kpi-lbl">Top assunto</div><div class="kpi-val">10.9%</div><div class="kpi-sub">Slots p/ retirada · 864</div></div>
+    <div class="kpi re"><div class="kpi-lbl">Top 2 acumulado</div><div class="kpi-val">20.3%</div><div class="kpi-sub">Slots + Troca desconhecido</div></div>
+    <div class="kpi pu"><div class="kpi-lbl">Corte Pareto 80%</div><div class="kpi-val">34</div><div class="kpi-sub">assuntos necessários</div></div>
+    <div class="kpi gr"><div class="kpi-lbl">Filiais ativas</div><div class="kpi-val">distrib.</div><div class="kpi-sub">max 3.1% por filial</div></div>
+  </div>
+
+  <!-- PARETO + FILIAL -->
+  <div class="section-title">Distribuição de Chamados</div>
+  <div class="grid-3-1">
+    <div class="card">
+      <div class="card-hd">Pareto por Assunto — Top 20</div>
+      <div class="card-sub">Top 20 acumulam 66% · Pareto 80% completo em 34 assuntos · Linha vermelha = corte 80%</div>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#1E40AF"></div>Todos dentro do Pareto (top 20 acum. 66%)</div>
+        <div class="leg"><div class="leg-dot" style="background:#EA580C;border-radius:50%"></div>% acumulada</div>
+        <div class="leg"><div class="leg-dot" style="background:#DC2626;border-radius:50%"></div>Corte 80%</div>
+      </div>
+      <div class="chart-wrap h380"><canvas id="paretoChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Ranking por Filial</div>
+      <div class="card-sub">Top 15 · distribuição uniforme</div>
+      <div class="filial-list" id="filialList"></div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="section-title">Exemplos de Tickets — Top 6 Problemas</div>
+  <div class="examples-note">💡 3 tickets mais recentes por assunto. Clique no ID para abrir na Intercom.</div>
+  <div class="examples-grid" id="examplesGrid"></div>
+
+  <!-- TREND -->
+  <div class="section-title">Evolução Semanal (Jan–Mar 2026)</div>
+  <div class="card">
+    <div class="card-hd">Volume semanal — Top 6 assuntos · 12 semanas completas</div>
+    <div class="card-sub">Reconhecimento facial: pico em Jan (86–88/sem), queda em Fev, novo pico em 23/03 (49)</div>
+    <div class="legend" id="trendLegend"></div>
+    <div class="chart-wrap h320"><canvas id="trendChart"></canvas></div>
+  </div>
+
+  <!-- FULL TABLE -->
+  <div class="section-title">Ranking Completo</div>
+  <div class="card">
+    <div class="card-hd">Assuntos ordenados por volume · Pareto 80% em 34 itens</div>
+    <div class="card-sub">Linhas azuis = dentro do Pareto 80%</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th style="width:40px">#</th><th>Assunto</th><th style="width:90px">Categoria</th>
+        <th style="width:72px;text-align:right">Tickets</th><th style="width:185px">Participação</th>
+        <th style="width:90px;text-align:right">% Acum.</th><th style="width:105px;text-align:center">Pareto 80%</th>
+      </tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table></div>
+  </div>
+
+  <!-- ACTION -->
+  <div class="section-title">Plano de Ação — Divisão por Equipe</div>
+  <div class="action-grid">
+    <div class="action-card blue-card">
+      <div class="action-head"><div class="action-icon">📋</div><div class="action-team">Produto &amp; Design</div></div>
+      <div class="action-items">
+        <div class="action-item"><div class="dot"></div>Slots para retirada (864): UX do agendamento — clientes perdem o horário por internet, confusão de plano e placa indisponível</div>
+        <div class="action-item"><div class="dot"></div>Troca moto desconhecido (738): documentar e criar fluxo no sistema para troca emergencial</div>
+        <div class="action-item"><div class="dot"></div>Erro durante a retirada (136): investigar causas por tipo</div>
+        <div class="action-item"><div class="dot"></div>Plano não aparece no app (30) e Plano com valores errados (4)</div>
+      </div>
+    </div>
+    <div class="action-card orange-card">
+      <div class="action-head"><div class="action-icon">🛠️</div><div class="action-team">Tech &amp; Sistemas</div></div>
+      <div class="action-items">
+        <div class="action-item"><div class="dot"></div>Reconhecimento facial (407): pico em Jan e 23/03 — investigar causa do padrão intermitente</div>
+        <div class="action-item"><div class="dot"></div>App erro tela inicial (413): consistente 19–53/semana por 12 semanas</div>
+        <div class="action-item"><div class="dot"></div>Erro no totem (184): falha física ou de software nas bases</div>
+        <div class="action-item"><div class="dot"></div>Erro abrir retirada (183) e Erro ao escolher plano (85)</div>
+        <div class="action-item"><div class="dot"></div>Erro no PIX (51) e Erro ao baixar multa (40)</div>
+      </div>
+    </div>
+    <div class="action-card purple-card">
+      <div class="action-head"><div class="action-icon">📂</div><div class="action-team">CS &amp; Operações</div></div>
+      <div class="action-items">
+        <div class="action-item"><div class="dot"></div>Pendências 190 e BO (243): backlog de regularização + treinamento de filiais</div>
+        <div class="action-item"><div class="dot"></div>Problema com termo de responsabilidade (225): revisar fluxo de aceite</div>
+        <div class="action-item"><div class="dot"></div>Vínculo titular/Minha Mottu (261): padronizar processo de licenciamento e transferência</div>
+        <div class="action-item"><div class="dot"></div>Não é possível acessar a CS (187): investigar gargalo de acesso</div>
+        <div class="action-item"><div class="dot"></div>Processo de contestação de multas (65) + Identificar infrator (65)</div>
+      </div>
+    </div>
+    <div class="action-card teal-card">
+      <div class="action-head"><div class="action-icon">🏢</div><div class="action-team">Frota &amp; Financeiro</div></div>
+      <div class="action-items">
+        <div class="action-item"><div class="dot"></div>Documentação atrasada frota (276): estável em 15–32 tickets/semana — processo sistêmico</div>
+        <div class="action-item"><div class="dot"></div>Inventário de motos (134) e Reanalisar motor/chassi (127)</div>
+        <div class="action-item"><div class="dot"></div>Débito pendente no app (159) e Reembolso não depositado (111)</div>
+        <div class="action-item"><div class="dot"></div>Atraso no pagamento do caução (131) e Cobrança duplicada (57)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section-title">Destaques e Alertas</div>
+  <div class="insight-row">
+    <div class="insight re">
+      <div class="insight-lbl">Reconhecimento facial — padrão intermitente</div>
+      <div class="insight-body">Pico de <strong>86–88 tickets/semana em Janeiro</strong>, queda para 12–16/semana em Fevereiro/Março, novo spike de <strong>49 em 23/03</strong>. Indica problema intermitente no sistema — não resolvido de forma permanente.</div>
+    </div>
+    <div class="insight or">
+      <div class="insight-lbl">Slots é o maior gargalo operacional</div>
+      <div class="insight-body">Com <strong>864 tickets em 90 dias</strong>, slots para retirada é o #1 em volume. Tickets mostram que clientes perdem o horário por internet caindo, confusão de plano e placas indisponíveis — gargalo de UX e processo.</div>
+    </div>
+    <div class="insight pu">
+      <div class="insight-lbl">Pareto muito distribuído</div>
+      <div class="insight-body">Com a base corrigida, o Pareto 80% precisa de <strong>34 assuntos</strong>. Nenhum problema domina: máximo 10.9%. Exige múltiplas frentes simultâneas — não há "1 problema a resolver".</div>
+    </div>
+    <div class="insight gr">
+      <div class="insight-lbl">Filiais sem dominância</div>
+      <div class="insight-body">Com a base corrigida, <strong>nenhuma filial domina</strong> — máximo 3.1% (Vila Leopoldina). Antes (base errada) Salvador aparecia com 32%, que era um artefato do filtro de usuario_id.</div>
+    </div>
+  </div>
+
+  <div class="footer">Relatório gerado em 06/04/2026 · CS Interno · 90 dias · Base corrigida sem filtro usuario_id · dm-mottu-aluguel.exp_atendimentos.tickets_intercom_csinterno</div>
+</div>
 
 <script>
-const CHART_DATA = {"labels": ["12/01", "19/01", "26/01", "02/02", "09/02", "16/02", "23/02", "02/03", "09/03", "16/03", "23/03"], "datasets": [{"label": "Agendamento / Retirada", "data": [192, 194, 183, 203, 174, 108, 173, 203, 249, 137, 121], "borderColor": "#5b9cf6", "backgroundColor": "#5b9cf6", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}, {"label": "Pagamento / Financeiro", "data": [78, 91, 69, 76, 78, 74, 74, 75, 85, 87, 65], "borderColor": "#ff9f40", "backgroundColor": "#ff9f40", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}, {"label": "Erro no app / sistema", "data": [44, 87, 72, 98, 92, 74, 54, 67, 57, 61, 40], "borderColor": "#a855f7", "backgroundColor": "#a855f7", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}, {"label": "Reconhecimento facial", "data": [90, 51, 23, 14, 16, 16, 15, 23, 18, 12, 44], "borderColor": "#ff6384", "backgroundColor": "#ff6384", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}, {"label": "Multas e infracoes", "data": [39, 26, 38, 27, 46, 34, 36, 33, 24, 28, 37], "borderColor": "#e91e8c", "backgroundColor": "#e91e8c", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}, {"label": "Troca de moto", "data": [317, 331, 320, 297, 304, 268, 292, 312, 312, 419, 263], "borderColor": "#26c6da", "backgroundColor": "#26c6da", "borderWidth": 2, "pointRadius": 5, "pointHoverRadius": 7, "fill": false, "tension": 0.3}]};
-const CHART_TITLE = "Volume semanal — Top 6 categorias · 11 semanas (12/01 a 23/03/2026)";
-const CHART_SUBTITLE = "Troca de moto: pico 419/sem em 16/03";
+const INTERCOM_BASE='https://app.intercom.com/a/inbox/j7qzgu9w/inbox/view/1669239/conversation/';
+const INTERCOM_SUFFIX='?view=List';
 
-Chart.defaults.color = '#8b949e';
-Chart.defaults.borderColor = '#21262d';
-Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+/* ── PARETO ── */
+const pd=[
+  {l:'Slots p/ retirada',          t:864,ac:10.9},{l:'Troca moto (desconhecido)',   t:738,ac:20.3},
+  {l:'App erro tela inicial',       t:413,ac:25.5},{l:'Reconhecimento facial',       t:407,ac:30.7},
+  {l:'Documentação atrasada frota', t:276,ac:34.2},{l:'Vínculo titular/Minha Mottu', t:261,ac:37.5},
+  {l:'Pendências 190 e BO',         t:243,ac:40.5},{l:'Prob. termo responsabilidade',t:225,ac:43.4},
+  {l:'Não acessa a CS',             t:187,ac:45.8},{l:'Erro no totem',               t:184,ac:48.1},
+  {l:'Erro abrir retirada',         t:183,ac:50.4},{l:'Débito pendente no app',      t:159,ac:52.4},
+  {l:'Dúvida sobre pagamentos',     t:150,ac:54.3},{l:'Trocar telefone',             t:140,ac:56.1},
+  {l:'Erro sobre CNH',              t:136,ac:57.8},{l:'Erro durante retirada',       t:136,ac:59.5},
+  {l:'Inventário de motos',         t:134,ac:61.2},{l:'Atraso caução',               t:131,ac:62.9},
+  {l:'Reanalisar motor/chassi',     t:127,ac:64.5},{l:'Processo envio ATPV',         t:116,ac:66.0},
+];
 
-document.getElementById('main-title').textContent = CHART_TITLE;
-document.getElementById('main-subtitle').textContent = CHART_SUBTITLE;
+const paretoPlugin={id:'pl',afterDraw(chart){
+  const{ctx,chartArea,scales}=chart;const y=scales.y2.getPixelForValue(80);
+  ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle='#DC2626';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(chartArea.left,y);ctx.lineTo(chartArea.right,y);ctx.stroke();
+  ctx.setLineDash([]);ctx.font='600 10px Inter,sans-serif';ctx.fillStyle='#DC2626';
+  ctx.fillText('80%',chartArea.right+5,y+4);ctx.restore();
+}};
 
-// KPIs
-const allVals = CHART_DATA.datasets.flatMap(d => d.data);
-const total = allVals.reduce((a,b)=>a+b,0);
-document.getElementById('kpi-total').textContent = total.toLocaleString('pt-BR');
-const peakVal = Math.max(...allVals);
-const peakDs = CHART_DATA.datasets.find(d => d.data.includes(peakVal));
-document.getElementById('kpi-peak').textContent = peakVal;
-document.getElementById('kpi-peak-cat').textContent = peakDs ? peakDs.label.split('/')[0].trim() : '';
-
-// Main chart — line
-new Chart(document.getElementById('chartMain'), {
-  type: 'line',
-  data: CHART_DATA,
-  options: {
-    responsive: true,
-    interaction: { mode: 'index', intersect: false },
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: { boxWidth: 12, padding: 20, font: { size: 12 }, color: '#c9d1d9' }
-      },
-      tooltip: {
-        backgroundColor: '#161b22',
-        borderColor: '#30363d',
-        borderWidth: 1,
-        titleColor: '#f0f6fc',
-        bodyColor: '#8b949e',
-        padding: 10
-      }
-    },
-    scales: {
-      x: {
-        grid: { color: '#21262d' },
-        ticks: { color: '#8b949e', font: { size: 11 } }
-      },
-      y: {
-        grid: { color: '#21262d' },
-        ticks: { color: '#8b949e', stepSize: 10 },
-        beginAtZero: true,
-        title: { display: true, text: 'Tickets', color: '#484f58', font: { size: 11 } }
-      }
-    }
-  }
+new Chart(document.getElementById('paretoChart'),{
+  type:'bar',
+  data:{labels:pd.map(d=>d.l),datasets:[
+    {type:'bar',label:'Tickets',data:pd.map(d=>d.t),backgroundColor:'#1E40AF',borderRadius:4,yAxisID:'y',order:2},
+    {type:'line',label:'% Acum.',data:pd.map(d=>d.ac),borderColor:'#EA580C',backgroundColor:'rgba(234,88,12,.07)',
+     borderWidth:2.5,pointBackgroundColor:'#EA580C',pointRadius:4,tension:.3,yAxisID:'y2',order:1,fill:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label(c){return c.datasetIndex===0?` ${c.raw} tickets`:` ${c.raw}% acumulado`;}}}},
+    scales:{
+      x:{ticks:{maxRotation:38,minRotation:28,font:{size:9.5},color:'#71717A',
+          callback(v,i){const l=this.getLabelForValue(i);return l.length>18?l.slice(0,18)+'…':l;}},grid:{display:false}},
+      y:{beginAtZero:true,position:'left',title:{display:true,text:'Tickets',font:{size:10},color:'#71717A'},
+        ticks:{stepSize:100,font:{size:10},color:'#71717A'},grid:{color:'rgba(0,0,0,.05)'}},
+      y2:{beginAtZero:true,max:100,position:'right',title:{display:true,text:'% Acumulada',font:{size:10},color:'#71717A'},
+        ticks:{callback:v=>v+'%',font:{size:10},color:'#71717A'},grid:{display:false}}
+    }},
+  plugins:[paretoPlugin]
 });
 
-// Bar chart — totals
-const totals = CHART_DATA.datasets.map(d => d.data.reduce((a,b)=>a+b,0));
-new Chart(document.getElementById('chartBar'), {
-  type: 'bar',
-  data: {
-    labels: CHART_DATA.datasets.map(d => d.label),
-    datasets: [{
-      label: 'Total',
-      data: totals,
-      backgroundColor: CHART_DATA.datasets.map(d => d.borderColor + '99'),
-      borderColor: CHART_DATA.datasets.map(d => d.borderColor),
-      borderWidth: 1,
-      borderRadius: 5
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { color: '#21262d' } },
-      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
-    }
-  }
+/* ── FILIAL ── */
+const filiais=[
+  {n:'Vila Leopoldina',t:242,p:3.1},{n:'Teresina',t:227,p:2.9},{n:'Taboão',t:223,p:2.8},
+  {n:'Salvador',t:165,p:2.1},{n:'Natal',t:156,p:2.0},{n:'Curitiba',t:155,p:2.0},
+  {n:'Recife',t:147,p:1.9},{n:'Ananindeua',t:140,p:1.8},{n:'Guarulhos',t:135,p:1.7},
+  {n:'Jandira',t:133,p:1.7},{n:'Belém',t:132,p:1.7},{n:'João Pessoa',t:132,p:1.7},
+  {n:'Rio Branco',t:132,p:1.7},{n:'Praia Grande',t:130,p:1.6},{n:'Limão - Zona Norte',t:127,p:1.6},
+];
+const maxF=filiais[0].t;
+const felEl=document.getElementById('filialList');
+filiais.forEach(f=>{
+  felEl.innerHTML+=`<div class="filial-item">
+    <div class="filial-name">${f.n}</div>
+    <div class="filial-bar-bg"><div class="filial-bar-fg" style="width:${(f.t/maxF*100).toFixed(1)}%"></div></div>
+    <div class="filial-count">${f.t}</div><div class="filial-pct">${f.p}%</div>
+  </div>`;
 });
 
-// Pie chart
-new Chart(document.getElementById('chartPie'), {
-  type: 'doughnut',
-  data: {
-    labels: CHART_DATA.datasets.map(d => d.label),
-    datasets: [{
-      data: totals,
-      backgroundColor: CHART_DATA.datasets.map(d => d.borderColor + 'cc'),
-      borderColor: '#161b22',
-      borderWidth: 2,
-      hoverOffset: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 }, color: '#c9d1d9' } }
-    }
-  }
+/* ── EXAMPLES ── */
+const examples=[
+  {rank:1,title:'Solicitar slots para retirada',total:864,tickets:[
+    {id:'215473677869731',filial:'Salvador',data:'28/03',desc:'Cliente chegou no horário de fazer a facial, só que a internet caiu e não conseguimos fazer a facial, aí acabou passando o horário.'},
+    {id:'215473678036415',filial:'Caxias do Sul',data:'28/03',desc:'O cliente efetuou a escolha de uma moto, porém a placa não está disponível para a retirada dele, teria como mudar e incluir a placa?'},
+    {id:'215473678655833',filial:'Curitiba',data:'28/03',desc:'Cliente optou por fazer uma usada e a disponibilidade ficou para dia 31. Ele quer pegar antes — como proceder?'},
+  ]},
+  {rank:2,title:'Solicitar troca de moto (motivo desconhecido)',total:738,tickets:[
+    {id:'215473678378680',filial:'Boa Vista',data:'28/03',desc:'Cliente deu entrada na base após um acidente, moto está com o chassi empenado e estamos próximo ao final do turno.'},
+    {id:'215473678969670',filial:'Interlagos',data:'28/03',desc:'Acabamos de pegar a moto para fazer motor, porém o eixo primário está quebrado, precisamos trocar devido ao horário.'},
+    {id:'215473678415693',filial:'Santos',data:'28/03',desc:'A moto foi entregue ao cliente porém apresentou problema na terceira engrenagem da árvore primária, não será possível realizar a manutenção em tempo hábil.'},
+  ]},
+  {rank:3,title:'Não é possível acessar o app (erro tela inicial)',total:413,tickets:[
+    {id:'215473677747456',filial:'S.J. dos Campos',data:'28/03',desc:'Meu aplicativo apareceu que iniciou processo de transferência, porém essa aba não abre no iOS e nem a central de ajuda. Além disso, foi emitido um boleto de R$5,00 em minha conta.'},
+    {id:'215473678580078',filial:'Mérida (MX)',data:'28/03',desc:'El cliente viene a mantenimiento pero no le reconoce su identificación facial. No podemos continuar el proceso.'},
+    {id:'215473676958379',filial:'Caxias do Sul',data:'28/03',desc:'A cliente deseja congelar o contrato por motivo de acidente, porém o app está dando erro no suporte e não estamos conseguindo enviar o atestado.'},
+  ]},
+  {rank:4,title:'Erro no reconhecimento facial',total:407,tickets:[
+    {id:'215473698499722',filial:'Messejana',data:'30/03',desc:'Cliente veio para retirada porém não consigo validar a facial. Já tentamos várias vezes e o sistema não reconhece.'},
+    {id:'215473697806669',filial:'Jandira',data:'30/03',desc:'O cliente já veio aqui desde a semana passada tentando abrir o atendimento e não está conseguindo. Já passou até dos KM e até agora não conseguiu resolver.'},
+    {id:'215473679077346',filial:'Juazeiro do Norte',data:'28/03',desc:'Cliente veio retirar a moto porém não tá dando certo para reconhecer no totem.'},
+  ]},
+  {rank:5,title:'Documentação atrasada frota',total:276,tickets:[
+    {id:'215473644606334',filial:'Ribeirão Preto',data:'26/03',desc:'No Bino o sistema consta como licenciamento atrasado. Cliente não consegue fazer nada com a moto.'},
+    {id:'215473648865071',filial:'Fortaleza',data:'26/03',desc:'Cliente não consegue fazer transferência pois consta uma pendência que a Mottu não deu baixa.'},
+    {id:'215473646558523',filial:'Fortaleza',data:'26/03',desc:'Cliente pagou as multas no aplicativo e ainda não foi dado baixa. Está bloqueado para transferência.'},
+  ]},
+  {rank:6,title:'Vínculo de moto titular ou Minha Mottu',total:261,tickets:[
+    {id:'215473676633345',filial:'Teixeira de Freitas',data:'28/03',desc:'Identificamos uma cobrança de mau uso e má conduta vinculada ao cliente, porém após análise verificamos que é indevida. A motocicleta foi recolhida e encaminhada para manutenção.'},
+    {id:'215473678966561',filial:'Querétaro (MX)',data:'28/03',desc:'El cliente vino por ajuste de motor, su moto quedó en sucursal. Ayer quedó lista y hoy vino a recogerla, pero en su aplicación aparece como "contrato suspendido".'},
+    {id:'215473661049744',filial:'Jandira',data:'27/03',desc:'Esse cliente ficou na dúvida sobre os termos que foram enviados — ele achou que já estava comprando e recusou o aceite. Precisa receber novamente o termo.'},
+  ]},
+];
+
+const exGrid=document.getElementById('examplesGrid');
+examples.forEach(ex=>{
+  const card=document.createElement('div');card.className='ex-card';
+  card.innerHTML=`<div class="ex-head"><span class="ex-rank">${ex.rank}</span><span class="ex-title">${ex.title}</span><span class="ex-count">${ex.total} tickets</span></div>
+  <div class="ex-tickets">${ex.tickets.map(t=>`<div class="ex-ticket">
+    <div class="ex-meta"><span class="ex-filial">${t.filial}</span><span class="ex-date">${t.data}</span>
+    <a class="ex-link" href="${INTERCOM_BASE}${t.id}${INTERCOM_SUFFIX}" target="_blank">#${t.id}</a></div>
+    <div class="ex-desc">${t.desc}</div>
+  </div>`).join('')}</div>`;
+  exGrid.appendChild(card);
+});
+
+/* ── TREND ── */
+const weeks=['05/01','12/01','19/01','26/01','02/02','09/02','16/02','23/02','02/03','09/03','16/03','23/03'];
+const ts=[
+  {label:'Slots p/ retirada',         color:'#1E40AF', data:[84,83,79,90,98,70,60,71,64,68,49,48]},
+  {label:'Troca moto (desconhecido)',  color:'#EA580C', data:[48,55,60,65,79,68,60,76,61,60,67,39]},
+  {label:'App erro tela inicial',      color:'#7C3AED', data:[29,19,41,45,53,52,36,19,33,26,37,23]},
+  {label:'Reconhecimento facial',      color:'#DC2626', data:[86,88,49,23,14,14,16,14,22,18,12,49]},
+  {label:'Doc. atrasada frota',        color:'#D97706', data:[31,31,31,32,23,27, 9,19,28,14,15,16]},
+  {label:'Vínculo titular/Minha Mottu',color:'#0F766E', data:[22,12,30,23,18,25,17,30,24,24,18,18]},
+];
+const legEl=document.getElementById('trendLegend');
+ts.forEach(s=>{legEl.innerHTML+=`<div class="leg"><div class="leg-dot" style="background:${s.color};border-radius:50%"></div>${s.label}</div>`;});
+new Chart(document.getElementById('trendChart'),{
+  type:'line',
+  data:{labels:weeks,datasets:ts.map(s=>({label:s.label,data:s.data,borderColor:s.color,backgroundColor:'transparent',borderWidth:2.5,pointBackgroundColor:s.color,pointRadius:5,pointHoverRadius:7,tension:.3}))},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},
+    scales:{x:{ticks:{font:{size:11},color:'#71717A'},grid:{color:'rgba(0,0,0,.04)'}},
+      y:{beginAtZero:true,ticks:{stepSize:10,font:{size:11},color:'#71717A'},title:{display:true,text:'Tickets',font:{size:10},color:'#71717A'},grid:{color:'rgba(0,0,0,.05)'}}}}
+});
+
+/* ── TABLE ── */
+const td=[
+  {a:'Solicitar slots para retirada',t:864,p:10.9,ac:10.9,cat:'proc',hi:true},
+  {a:'Solicitar troca de moto (motivo desconhecido)',t:738,p:9.3,ac:20.3,cat:'proc',hi:true},
+  {a:'Não é possível acessar o app (erro tela inicial)',t:413,p:5.2,ac:25.5,cat:'sis',hi:true},
+  {a:'Erro no reconhecimento facial',t:407,p:5.2,ac:30.7,cat:'sis',hi:true},
+  {a:'Documentação atrasada frota',t:276,p:3.5,ac:34.2,cat:'fr',hi:true},
+  {a:'Vínculo de moto titular ou Minha Mottu',t:261,p:3.3,ac:37.5,cat:'proc',hi:true},
+  {a:'Pendências 190 e BO',t:243,p:3.1,ac:40.5,cat:'proc',hi:true},
+  {a:'Problema com termo de responsabilidade',t:225,p:2.8,ac:43.4,cat:'proc',hi:true},
+  {a:'Não é possível acessar a CS',t:187,p:2.4,ac:45.8,cat:'ac',hi:true},
+  {a:'Erro no totem (motivo desconhecido)',t:184,p:2.3,ac:48.1,cat:'sis',hi:true},
+  {a:'Erro ao abrir retirada',t:183,p:2.3,ac:50.4,cat:'sis',hi:true},
+  {a:'Débito pendente não aparece no app',t:159,p:2.0,ac:52.4,cat:'fin',hi:true},
+  {a:'Dúvida sobre pagamentos',t:150,p:1.9,ac:54.3,cat:'fin',hi:true},
+  {a:'Trocar número de telefone',t:140,p:1.8,ac:56.1,cat:'out',hi:true},
+  {a:'Erro sobre CNH',t:136,p:1.7,ac:57.8,cat:'proc',hi:true},
+  {a:'Erro durante a retirada',t:136,p:1.7,ac:59.5,cat:'sis',hi:true},
+  {a:'Inventário de motos',t:134,p:1.7,ac:61.2,cat:'fr',hi:true},
+  {a:'Atraso no pagamento do caução',t:131,p:1.7,ac:62.9,cat:'fin',hi:true},
+  {a:'Reanalisar numeração motor ou chassi',t:127,p:1.6,ac:64.5,cat:'proc',hi:true},
+  {a:'Processo envio ATPV',t:116,p:1.5,ac:66.0,cat:'proc',hi:true},
+  {a:'Reembolso não foi depositado',t:111,p:1.4,ac:67.4,cat:'fin',hi:true},
+  {a:'Falta de opção para retirada',t:107,p:1.4,ac:68.7,cat:'proc',hi:true},
+  {a:'Colaborador não consegue acessar sistema',t:92,p:1.2,ac:69.9,cat:'ac',hi:true},
+  {a:'Erro ao abrir manutenção',t:88,p:1.1,ac:71.0,cat:'out',hi:true},
+  {a:'Identificar qual multa a cobrança se refere',t:86,p:1.1,ac:72.1,cat:'fin',hi:true},
+  {a:'Erro no PIX',t:85,p:1.1,ac:73.2,cat:'fin',hi:true},
+  {a:'Erro ao escolher plano',t:85,p:1.1,ac:74.3,cat:'sis',hi:true},
+  {a:'Dúvida sobre transferência',t:80,p:1.0,ac:75.3,cat:'proc',hi:true},
+  {a:'Atrelar moto ao cliente',t:69,p:0.9,ac:76.1,cat:'proc',hi:true},
+  {a:'Erro na selfie',t:66,p:0.8,ac:77.0,cat:'sis',hi:true},
+  {a:'Processo de contestação de multas',t:65,p:0.8,ac:77.8,cat:'proc',hi:true},
+  {a:'Erro na verificação de token no app',t:65,p:0.8,ac:78.6,cat:'ac',hi:true},
+  {a:'Erro ao completar retirada',t:64,p:0.8,ac:79.4,cat:'sis',hi:true},
+  {a:'Erro na situação da moto recolhida na rua',t:63,p:0.8,ac:80.2,cat:'fr',hi:true},
+  {a:'Dúvida sobre restrição',t:60,p:0.8,ac:81.0,cat:'proc',hi:false},
+  {a:'Colaborador não aparece na lista',t:59,p:0.7,ac:81.7,cat:'ac',hi:false},
+  {a:'Dúvida sobre roubo',t:59,p:0.7,ac:82.5,cat:'proc',hi:false},
+  {a:'Erro ao acessar sistema Attendance',t:58,p:0.7,ac:83.2,cat:'ac',hi:false},
+  {a:'Dúvida sobre cobrança extra',t:57,p:0.7,ac:83.9,cat:'fin',hi:false},
+  {a:'Erro de bloqueio inadimplência',t:57,p:0.7,ac:84.7,cat:'fin',hi:false},
+  {a:'Colaborador com problema no login',t:50,p:0.6,ac:85.3,cat:'ac',hi:false},
+  {a:'Recebimento 0km erro na tela',t:49,p:0.6,ac:85.9,cat:'sis',hi:false},
+  {a:'Representante com erro',t:48,p:0.6,ac:86.5,cat:'sis',hi:false},
+  {a:'Erro ao solicitar taxa NIC',t:48,p:0.6,ac:87.1,cat:'fin',hi:false},
+  {a:'Moto aprovada não fica pronta',t:45,p:0.6,ac:87.7,cat:'fr',hi:false},
+  {a:'Dúvida sobre multas',t:45,p:0.6,ac:88.3,cat:'fin',hi:false},
+  {a:'Cobrança duplicada de aluguel',t:44,p:0.6,ac:88.8,cat:'fin',hi:false},
+  {a:'Problema com garantia Conquiste',t:43,p:0.5,ac:89.4,cat:'proc',hi:false},
+  {a:'Erro ao alterar endereço no app',t:43,p:0.5,ac:89.9,cat:'sis',hi:false},
+  {a:'Transferência de motos',t:42,p:0.5,ac:90.5,cat:'fr',hi:false},
+  {a:'Erro ao baixar multa',t:40,p:0.5,ac:91.0,cat:'fin',hi:false},
+  {a:'Erro ao agendar descaracterização',t:40,p:0.5,ac:91.5,cat:'sis',hi:false},
+  {a:'Alterar local de moto',t:39,p:0.5,ac:92.0,cat:'fr',hi:false},
+  {a:'Identificar real infrator',t:38,p:0.5,ac:92.4,cat:'proc',hi:false},
+  {a:'Solicitar troca automatizado',t:35,p:0.4,ac:92.9,cat:'proc',hi:false},
+  {a:'Erro sobre sistema do chip',t:34,p:0.4,ac:93.3,cat:'sis',hi:false},
+  {a:'Erro no CRM de vendas',t:31,p:0.4,ac:93.7,cat:'sis',hi:false},
+  {a:'Manutenção não foi criada',t:31,p:0.4,ac:94.1,cat:'out',hi:false},
+  {a:'Plano não aparece no app',t:30,p:0.4,ac:94.5,cat:'sis',hi:false},
+  {a:'MNT Erro durante a manutenção',t:29,p:0.4,ac:94.8,cat:'out',hi:false},
+  {a:'Dúvida sobre sinistro',t:29,p:0.4,ac:95.2,cat:'proc',hi:false},
+];
+
+const catMap={proc:{l:'Processo',c:'t-proc'},sis:{l:'Sistema',c:'t-sis'},ac:{l:'Acesso',c:'t-ac'},fr:{l:'Frota',c:'t-fr'},fin:{l:'Financeiro',c:'t-fin'},out:{l:'Outros',c:'t-out'}};
+const maxT=td[0].t;
+const tbody=document.getElementById('tableBody');
+td.forEach((d,i)=>{
+  const cat=catMap[d.cat];const tr=document.createElement('tr');
+  if(d.hi)tr.classList.add('hi');
+  tr.innerHTML=`
+    <td><span class="rank ${d.hi?'rank-hi':'rank-lo'}">${i+1}</span></td>
+    <td style="max-width:300px;font-weight:500;line-height:1.3">${d.a}</td>
+    <td><span class="tag ${cat.c}">${cat.l}</span></td>
+    <td style="text-align:right;font-weight:700;font-size:.86rem">${d.t}</td>
+    <td><div class="bar-row"><div class="bar-bg"><div class="bar-fg${d.hi?'':' lo'}" style="width:${(d.t/maxT*100).toFixed(1)}%"></div></div><span class="pct-lbl">${d.p}%</span></div></td>
+    <td style="text-align:right"><span class="${d.hi?'acum-hi':'acum-lo'}">${d.ac}%</span></td>
+    <td style="text-align:center">${d.hi?'<span class="pill pill-yes">✓ Sim</span>':'<span class="pill pill-no">Não</span>'}</td>`;
+  tbody.appendChild(tr);
 });
 </script>
 </body>
