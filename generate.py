@@ -37,25 +37,25 @@ ASSIGNEE_MAP = [
 ]
 
 GROUPS = [
-    {"num":1,"cls":"g1","icon":"🚀","members":[
+    {"num":1,"cls":"g1","icon":"🚀","subjects":["Pagamento / Financeiro"],"members":[
         {"display":"André Porto",    "key":"Andre Porto",    "initials":"AN"},
         {"display":"Ricardo Suzuki", "key":"Ricardo Suzuki", "initials":"RC"},
         {"display":"Bárbara Hülse",  "key":"Barbara Hulse",  "initials":"BH"},
         {"display":"João Sant'Anna", "key":"Joao Sant Anna", "initials":"JO"},
     ]},
-    {"num":2,"cls":"g2","icon":"⚡","members":[
+    {"num":2,"cls":"g2","icon":"⚡","subjects":["Documentação / Licenciamento","Pendências / Regularização","Vínculo / Minha Mottu"],"members":[
         {"display":"Cristtiane Sjobom","key":"Cristtiane Sjobom","initials":"CS"},
         {"display":"Rafael Yoneta",   "key":"Rafael Yoneta",    "initials":"RY"},
         {"display":"Yan Garcia",      "key":"Yan Garcia",       "initials":"YG"},
         {"display":"Faruk Feres",     "key":"Faruk Feres",      "initials":"FF"},
     ]},
-    {"num":3,"cls":"g3","icon":"🔥","members":[
+    {"num":3,"cls":"g3","icon":"🔥","subjects":["Não é possível acessar o app por erro na tela inicial"],"members":[
         {"display":"Gerbert Santos", "key":"Gerbert Santos", "initials":"GS"},
         {"display":"Pedro Stival",   "key":"Pedro Stival",   "initials":"PS"},
         {"display":"Bruno Martins",  "key":"Bruno Martins",  "initials":"BM"},
         {"display":"Isabela Araújo", "key":"Isabela Araujo", "initials":"IA","nao_atuou":True},
     ]},
-    {"num":4,"cls":"g4","icon":"💎","members":[
+    {"num":4,"cls":"g4","icon":"💎","subjects":["Reconhecimento Facial","SINESP/190 - BO - Furto"],"members":[
         {"display":"Ricardo Goes",      "key":"Ricardo Goes",      "initials":"RG"},
         {"display":"Rafael Rodrigues",  "key":"Rafael Rodrigues",  "initials":"RR"},
         {"display":"Adriano Rodrigues", "key":"Adriano Rodrigues", "initials":"AR"},
@@ -67,7 +67,7 @@ GROUPS = [
         {"display":"Felipe Fernandes", "key":"Felipe Fernandes", "initials":"FH"},
         {"display":"Arthur Iensen",    "key":"Arthur Iensen",    "initials":"AI"},
     ]},
-    {"num":6,"cls":"g6","icon":"💠","members":[
+    {"num":6,"cls":"g6","icon":"💠","subjects":["Erro no totem"],"members":[
         {"display":"Yasmin Cozaciuc","key":"Yasmin Cozaciuc","initials":"YC"},
         {"display":"William Bartos", "key":"William Bartos", "initials":"WB","nao_atuou":True},
         {"display":"Phillipe Rangel","key":"Phillipe Rangel","initials":"PR"},
@@ -208,6 +208,8 @@ CSS = """* { margin: 0; padding: 0; box-sizing: border-box; }
   .progress-track { background: #21262d; border-radius: 4px; height: 5px; overflow: hidden; }
   .progress-fill  { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #238636, #56d364); }
   .no-ticket { padding: 8px; font-size: 0.72rem; color: #484f58; font-style: italic; }
+.group-subjects { padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid #21262d; background: #0d1117; }
+.subj-tag { font-size: 0.72rem; color: #c9d1d9; background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 3px 10px; font-weight: 500; }
   .group-stats { display: flex; gap: 6px; padding: 10px 16px; border-top: 1px solid #21262d; background: #0d1117; flex-wrap: wrap; }
   .stat-pill { border-radius: 10px; padding: 2px 8px; font-size: 0.65rem; font-weight: 600; }
   .footer { text-align: center; padding: 20px; color: #484f58; font-size: 0.75rem; border-top: 1px solid #21262d; margin-top: 8px; }
