@@ -61,7 +61,7 @@ GROUPS = [
         {"display":"Adriano Rodrigues", "key":"Adriano Rodrigues", "initials":"AR"},
         {"display":"Priscila Mara",     "key":"Priscila Mara",     "initials":"PM"},
     ]},
-    {"num":5,"cls":"g5","icon":"⚔️","members":[
+    {"num":5,"cls":"g5","icon":"⚔️","subjects":["Supply Chain Quick wins"],"members":[
         {"display":"Leandro Lustosa",  "key":"Leandro Lustosa",  "initials":"LL"},
         {"display":"Jean Fontoura",    "key":"Jean Fontoura",    "initials":"JF"},
         {"display":"Felipe Fernandes", "key":"Felipe Fernandes", "initials":"FH"},
