@@ -208,7 +208,8 @@ CSS = """* { margin: 0; padding: 0; box-sizing: border-box; }
   .progress-track { background: #21262d; border-radius: 4px; height: 5px; overflow: hidden; }
   .progress-fill  { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #238636, #56d364); }
   .no-ticket { padding: 8px; font-size: 0.72rem; color: #484f58; font-style: italic; }
-.group-subjects { padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid #21262d; background: #0d1117; }
+.group-subjects { padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid #21262d; background: #0d1117; align-items: center; }
+.subj-label { font-size: 0.68rem; color: #484f58; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px; white-space: nowrap; }
 .subj-tag { font-size: 0.72rem; color: #c9d1d9; background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 3px 10px; font-weight: 500; }
   .group-stats { display: flex; gap: 6px; padding: 10px 16px; border-top: 1px solid #21262d; background: #0d1117; flex-wrap: wrap; }
   .stat-pill { border-radius: 10px; padding: 2px 8px; font-size: 0.65rem; font-weight: 600; }
