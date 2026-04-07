@@ -302,6 +302,10 @@ def generate_html(issues, mi):
         card.append("<div class='group-card " + g["cls"] + "'>")
         card.append("<div class='group-header'><h2>" + g["icon"] + " GRUPO " + str(g["num"]) + "</h2>")
         card.append("<span class='group-xp'>" + str(len(g["members"])) + " membros · " + str(t_count) + " tickets</span></div>")
+        subjects = g.get("subjects", [])
+        if subjects:
+            tags = "".join("<span class='subj-tag'>" + s + "</span>" for s in subjects)
+            card.append("<div class='group-subjects'><span class='subj-label'>Assuntos:</span>" + tags + "</div>")
         card.append("<div class='group-body'>" + "".join(mparts) + "</div>")
         card.append("<div class='group-stats'>" + pills_html + "</div>")
         card.append("</div>")
