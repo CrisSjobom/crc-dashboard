@@ -333,6 +333,7 @@ def generate_html(issues, mi):
     html.append("<div class='meta-badge'>Não avançou <span style='color:#f85149'>" + str(nao) + "</span></div>")
     html.append("<div class='meta-badge'>Ag. Dev <span style='color:#79c0ff'>" + str(ag) + "</span></div>")
     html.append("<div class='meta-badge'>Não iniciado <span style='color:#e3b341'>" + str(ni) + "</span></div>")
+    html.append("<a href='analytics.html' style='background:#0d2a0d;border:1px solid #238636;border-radius:20px;padding:4px 14px;font-size:0.8rem;color:#56d364;text-decoration:none;display:inline-flex;align-items:center;gap:6px;'>📊 Analytics CS</a>")
     html.append("<div class='live-badge'><span class='live-dot'></span>📅 " + now + " (Horário SP)</div>")
     html.append("</div></header>")
     html.append("<div class='grid'>" + "".join(cards) + "</div>")
