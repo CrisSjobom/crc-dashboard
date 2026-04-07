@@ -32,6 +32,7 @@ ASSIGNEE_MAP = [
     ("Yasmin Jannuzzi","Yasmin Cozaciuc"),("Yasmin Di Franco","Yasmin Cozaciuc"),
     ("William Bartos","William Bartos"),
     ("Phillipe Soares","Phillipe Rangel"),
+    ("Joao Pradella","Joao Pradella"),("João Pradella","Joao Pradella"),
     ("João Sant","Joao Sant Anna"),("Joao Sant","Joao Sant Anna"),("Sant'Anna","Joao Sant Anna"),
 ]
 
@@ -70,6 +71,7 @@ GROUPS = [
         {"display":"Yasmin Cozaciuc","key":"Yasmin Cozaciuc","initials":"YC"},
         {"display":"William Bartos", "key":"William Bartos", "initials":"WB","nao_atuou":True},
         {"display":"Phillipe Rangel","key":"Phillipe Rangel","initials":"PR"},
+        {"display":"João Pradella","key":"Joao Pradella","initials":"JP"},
     ]},
 ]
 
