@@ -32,7 +32,7 @@ ASSIGNEE_MAP = [
     ("Yasmin Jannuzzi","Yasmin Cozaciuc"),("Yasmin Di Franco","Yasmin Cozaciuc"),
     ("William Bartos","William Bartos"),
     ("Phillipe Soares","Phillipe Rangel"),
-    ("Joao Pradella","Joao Pradella"),("João Pradella","Joao Pradella"),
+    ("Joao Pradella","Joao Pradella"),("João Pradella","Joao Pradella"),("joao.pradella","Joao Pradella"),("Pradella","Joao Pradella"),
     ("João Sant","Joao Sant Anna"),("Joao Sant","Joao Sant Anna"),("Sant'Anna","Joao Sant Anna"),
 ]
 
